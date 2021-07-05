@@ -1,0 +1,8 @@
+CREATE TABLE member(
+num INT(11) NULL DEFAULT NULL ,
+NAME VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci',
+addr VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci'
+)
+COLLATE ='utf8mb3_general_ci'
+ENGINE =INNODB
+;
