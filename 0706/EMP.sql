@@ -62,7 +62,7 @@ INSERT INTO EMP VALUES
 INSERT INTO EMP VALUES
 (7844,'TURNER','SALESMAN',7698,STR_TO_DATE('8-9-1981','%d-%m-%Y'),1500,0,30);
 */
-
+/*
 -- fields, column(열)
 SELECT empno, ename, job FROM emp;
 SELECT * FROM emp;
@@ -78,3 +78,28 @@ SELECT empno AS "사원번호", ename AS "사원이름" FROM emp;
 -- SELECT empno AS 사원번호, ename AS 사원이름 FROM emp;
 
 -- 조건절
+-- SELECT sal 급여, sal*1.1 급여와 보너스 합 FROM emp WHERE deptno = 10;
+
+-- 급여가 3000 이상인 사원들의 모든 정보를 출력
+SELECT * FROM emp WHERE sal >= 3000;
+SELECT ename, deptno FROM emp WHERE deptno != 30;
+
+-- 논리 연산자
+-- emp 테이블에서 부서번호가 10이고 급여가 3000이상인 사원들의 이름과 급여를 출력하세요.
+SELECT ename, sal FROM emp WHERE deptno = 10 AND sal >= 3000;
+
+SELECT empno, deptno FROM emp WHERE job='SALEMAN' of job = 'MANAGER';
+
+-- in 연산자
+-- 부서번호가 10번이거나 20번인 사원의 사원번호와 이름, 부서번호를 출력하세요.
+SELECT empno, ename, deptno FROM emp deptno IN(10, 20);
+SELECT empno, ename, deptno FROM emp deptno=10 OR deptno = 20;
+
+-- between 연산자 : 범위 t
+-- 급여가 1000과 2000 사이인 사원들의 사원번호, 이름, 급여를 출력하세요.
+SELECT empno, ename, sal FROM emp WHERE sal BETWEEN 1000 AND 2000;
+SELECT empno, ename, sal FROM emp WHERE sal >= 1000 AND SAL <= 2000;
+*/
+
+-- 사원이름이 'FORD'와 'SCOTT' 사이의 사원들의 사원번호, 이름을 출력해 보세요
+SELECT empno, ename FROM emp WHERE ename BETWEEN 'FORD' AND 'SCOTT';
