@@ -1,0 +1,1 @@
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `` AS SELECT bunho, NAME, kor, mat, eng, total, average, grade FROM student; ;
