@@ -9,3 +9,4 @@ CREATE TABLE `gradeinfo` (
 COLLATE='utf8mb3_general_ci'
 ENGINE=InnoDB
 ;
+tutorial
