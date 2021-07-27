@@ -165,3 +165,38 @@ x[x%%2 == 0]
 (x[x<5] <- 0)
 x
 
+# 2x + 3y = 5
+# 3x + 5y = 6
+mdat = matrix(c(2,3,3,5), nrow=2, byrow=T)
+c = c(5,6)
+solve(mdat, c)
+
+# 문제: 다음 방정식의 해를 푸시오
+# 2x + y + z = 1
+# 4x + 3y + 4z = 2
+# -4x + 2y + 2z = -6
+mat3 = matrix(c(2,1,1, 4,3,4, -4,2,2), nrow=3, byrow=T)
+c1 = c(1,2,-6)
+solve(mat3, c1)
+
+# 문제 1~15를 요소로하는 5x3 행렬을 만들고 16~30을 요소로 하는 5x3행렬을 만들고
+# 1) 두 행렬을 rbind와 cbind로 묶어서 출력 하시요
+# 2) 위 두 행렬의 사칙 연산을 수행하시요.
+(mat1 = matrix(1:15, nrow = 5, ncol=3, byrow=T))
+(mat2 = matrix(16:30, nrow=5, ncol=3, byrow=T))
+str(mat1)
+str(mat1[1,])
+dim(mat1)
+dim(mat2)
+# 1) 두 행렬을 rbind와 cbind로 묶어서 출력 하시요
+rbind(mat1,mat2)
+cbind(mat1,mat2)
+# 2) 위 두 행렬의 사칙 연산을 수행하시요.
+(mat1 + mat2)
+(mat1 - mat2)
+(mat1 * mat2)
+(mat1 / mat2)
+# 3 두 행렬의 곱
+(mat1 %*% t(mat2))
+
+
