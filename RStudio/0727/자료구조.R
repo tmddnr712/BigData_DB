@@ -105,8 +105,8 @@ Vector5 + Vector6
 Vector5 + as.numeric(Vector7)
 
 
-#install.packages("NISTunits", dependencies = TRUE)
-#library(NISTunits)
+install.packages("NISTunits", dependencies = TRUE)
+library(NISTunits)
 x <- c(1,0,0)
 y <- c(0,1,0)
 xq = sqrt(1^2 + 0^2 + 0^2) #norm
@@ -114,7 +114,7 @@ yq = sqrt(0^2 + 1^2 + 0^2) #norm
 x = x/xq
 y = y/yq
 angle = x %*% y # 크기값이 고려된 사이각
-#NISTradianTOdeg(acos(angle))
+NISTradianTOdeg(acos(angle))
 
 # Factor
 (x <- factor(c("single", "married", "married", "single")))
