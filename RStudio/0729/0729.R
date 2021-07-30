@@ -34,13 +34,14 @@ titanic.dt[pclass=="1", length(which(age>20))/.N, by="sex"]
 # 1) 위의 데이터 생성을 위해서 empno, pay, bounus 변수를 생성하시요
 # 2) 위의 표의 형식대로 데이터프레임을 생성하세요.
 # pay201801 <-
+pay201801 <- data.frame(empno, pay, bounus)
 
 # 3) 다음의 출력처럼 total 컬럼을 추가하려고한다. 아래의 순번에 내용을 작성하세요.
   # 1) 계산 : total <-
   # 2) 함수: pa201801 <-               (pay201801, total)
 
 # 4) dplyr 패키지의 관련함수를 이용해서 총급여 300이상인 사원번호와 총급여를 출력하세요.
-
+pay201801 %>% filter(pay>=300) %>% dplyr::select(empno, total)
 # 5) 다음 출력처럼 부서번호(deptno)을 추가하세요.
 # empno   pay   bounus  deptno
 # 101     250   0.10      1
@@ -48,10 +49,17 @@ titanic.dt[pclass=="1", length(which(age>20))/.N, by="sex"]
 # 103     200   0.12      1
 # 104     300   0.15      2
 # 105    1000   0.00      2
-
+deptno <- c(1,2,1,2,2)
+pay201801 <- cbind(pay201801, deptno)
 # 아래의 출력 내용처럼 부서별 급여 평균을 출력하세요
 # A tibble : 2 x 2
 # deptno          mean_total
 # <dbl>           <dbl>
 #   1       1     250.
 #   2       2     514.
+pay201801 %>%
+  dplyr::select(deptno, total) %>%
+  group_by(deptno) %>%
+  dplyr::summarise(mean_total = mean(total))
+
+ggplot(pay201801, aes(empno, pay)) + geom_col()
