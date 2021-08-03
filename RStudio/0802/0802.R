@@ -127,3 +127,40 @@ Prob(b) # 12 / 52
 Prob(s, suit=="Heart", givne=rank %in% 7:9) #3 / 12
 Prob(union(a,b))
 Prob(a) + Prob(b) - Prob(intersect(a,b))
+
+# 문제 : 숫자 카드를 뽑았는데 spade, heart 이면서 5번일 확률은?
+(c <- cards(makespace = TRUE))
+SH5 <- subset(c, suit %in% c("Spade", "Spade"))
+sh5 <- subset(c, rank==5)
+Prob(intersect(SH5, sh5))
+
+# 문제 : 숫자 카드를 뽑았는데 2,3 이 선택 되었고 그 중 diamond 일 확률은?
+(D23 <- subset(c, rank %in% 2:3))
+(d23 <- subset(c, suit == "Diamond"))
+Prob(d23, given = D23)
+
+# 모집단 분포를 알아야 하는 이유: 확률을 확인하기 위해서
+# 표본이 30개 이상이면 어떤 데이터도 정규분포를 따른다. # 중심 극한의 원리
+rnorm(1, 64.5, 2.5)
+rnorm(5, 64.5, 2.5)
+
+(x <- rnorm(1000, 64.5, 2.5))
+(x <- sort(x))
+(d <- dnorm(x, 64.5, 2.5)) # 확률률
+par(mfrow=c(1,4))
+hist(x, probability = TRUE, main="한국 남자들 몸무게 분포")
+plot(x,d,main="한국 남자들 몸무게 분포", xlab="몸무게게")
+curve(dnorm(x), -3, 3)
+plot(density(rnorm(10000, 0, 1))) # 표준 정규분포에서 데이터를 획득
+par(mfrow=c(1,1))
+
+pnorm(0)
+pnorm(1)
+pnorm(2)
+pnorm(3)
+
+(pnorm(1) - pnorm(0)) * 2
+(pnorm(2) - pnorm(0)) * 2
+(pnorm(3) - pnorm(0)) * 2
+
+# dnorm 분위수에 확률값

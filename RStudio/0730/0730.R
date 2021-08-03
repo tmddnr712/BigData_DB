@@ -139,7 +139,7 @@ install.packages("dplyr")
 library(dplyr)
 install.packages("data.table")
 library(data.table)
-election <- read.csv("C:/Users/노승욱/DB/RStudio/0730/election_2012.csv", fileEncoding="UTF-8")
+election <- read.csv("C:/Users/노승욱/Desktop/R자료/election_2012.csv", fileEncoding="UTF-8")
 class(election)
 election.dt <- data.table(election)
 class(election.dt)
@@ -150,7 +150,7 @@ head(election.dt)
 election.dt = election.dt %>% select(cand_id, cand_nm, contbr_nm, contbr_occupation, contb_receipt_amt)
 
 # 문제2
-romney <- subset(election.dt, cand_nm=="Bachmann, Michelle")
+romney <- subset(election.dt, cand_nm=="Romney, Mitt")
 head(romney)
 obama <- subset(election.dt, cand_nm == "Obama, Barack")
 head(obama)
@@ -159,13 +159,45 @@ test1 <- subset(election.dt, contb_receipt_amt==250)
 head(test1)
 
 #문제3
-romney_6000over <- subset(election.dt, contbr_nm=="Bachmann, Michelle" & contb_receipt_amt > 600)
+romney_6000over <- subset(election.dt, contbr_nm=="Bachmann, Michelle" & contb_receipt_amt >= 600)
 head(romney_6000over)
-obama_6000over <- subset(election.dt, contbr_nm=="Obama, Barack" & contb_receipt_amt > 600)
+obama_6000over <- subset(election.dt, contbr_nm=="Obama, Barack" & contb_receipt_amt >= 600)
 head(obama_6000over)
 
-test1 <- subset(election.dt, contb_receipt_amt>250)
-head(test1)
+#------------------------------new-------------------------------#
+romney_6000over2 <- subset(romney, contb_receipt_amt >= 600)
+head(romney_6000over2)
+obama_6000over2 <- subset(obama, contb_receipt_amt >= 600)
+head(obama_6000over2)
+
+dim(romney_6000over2)
+dim(obama_6000over2)
+
+nrow(distinct(romney_6000over2, contbr_nm))
+nrow(distinct(obama_6000over2, contbr_nm)) #소수자가 중복해서 후원(열성지지자)
+
+filter(romney_6000over2, contb_receipt_amt == max(contb_receipt_amt)) %>% select(contbr_nm, contbr_occupation)
+filter(obama_6000over2, contb_receipt_amt == max(contb_receipt_amt)) %>% select(contbr_nm, contbr_occupation)
+
+dim(romney)
+dim(obama)
+
+romney2 <- subset(romney, contbr_occupation != '')
+obama2 <- subset(obama, contbr_occupation != '')
+dim(romney2)
+dim(obama2)
+write.csv(romney2, "romney.csv", row.names = F)
+write.csv(obama2, "obama.csv", row.names = F)
+
+
+romney3 <- read.csv("romney.csv", header=T)
+obama3 <- read.csv("obama.csv", header=T)
+sum(romney3$contb_receipt_amt[romney3$contbr_occupation=='RETIRED'])
+sum(obama3$contb_receipt_amt[obama3$contbr_occupation=='RETIRED'])
+
+
+head(sort(table(romney3$contbr_occupation), decreasing = T),3)
+head(sort(table(obama3$contbr_occupation), decreasing = T),3)
 
 # 중복값제거
 #election.dt %>% duplicated()
@@ -173,7 +205,7 @@ head(test1)
 #election.dt %>% distinct()
 #election.dt %>% distinct(cand_id, .keep_all=TRUE)
 #
-
+#-----------------------------------------------------------------------------------#
 library(dplyr)
 election <- read.csv("C:/Users/yoobi/Downloads/election_2012.csv")
 View(election)
