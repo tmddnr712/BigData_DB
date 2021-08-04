@@ -199,6 +199,10 @@ sum(obama3$contb_receipt_amt[obama3$contbr_occupation=='RETIRED'])
 head(sort(table(romney3$contbr_occupation), decreasing = T),3)
 head(sort(table(obama3$contbr_occupation), decreasing = T),3)
 
+distinct(romney3, contbr_occupation)
+
+sum(romney3$contbr_occupation=='ENGINEER')
+sum(obama3$contb_receipt_amt[obama3$contbr_occupation=='ENGINEER'])
 # 중복값제거
 #election.dt %>% duplicated()
 #duplicates <- election.dt %>% duplicated() %>% table()
