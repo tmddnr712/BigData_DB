@@ -69,6 +69,8 @@ pred
 summary(pred)
 str(pred)
 
+
+
 # 예측치 변환
 cpred <- ifelse(pred >= 0.5, 1, 0)
 table(cpred)
@@ -77,6 +79,9 @@ t <- table(cpred, test$RainTomorrow)
 t
 sum(diag(t)) / nrow(test)
 
+
+mean(test == t)
+mean(test != t)
 # 민감도와 특이도와의 관계에서 평가 모델을 제공 : ROC
 install.packages("ROCR")
 #update.packages("ROCR")
@@ -124,3 +129,63 @@ library(ISLR)
 Smarket
 dim(Smarket)
 str(Smarket)
+#
+attach(Smarket)
+plot(Volume)
+# lag 시차
+glm.fit <- glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Volume, data = Smarket, family = binomial())
+summary(glm.fit)
+exp(coef(glm.fit))
+glm.probs <- predict(glm.fit, type="response")
+residuals(glm.fit, type="deviance")
+(glm.pred <- rep("Down", dim(Smarket)[1]))
+(glm.pred[glm.probs>0.5]<- "Up")
+res <- table(glm.pred, Direction)
+res
+
+sum(diag(res)) / sum(res)
+detach(Smarket)
+
+
+# 문제
+# class : 암여부(1.폐암, 2: 폐암아님)
+# breastcan_t.csv : train 10로 구분해서 int 형으로 데이터 설정: 독립변수 - 연속형
+# breastcan_te.csv : test
+# logistic regression 으로 모델 생성
+# 테스트 데이터에 대하여 accuracy 출력
+
+cancer_train <- read.csv("C:/Users/노승욱/Desktop/R자료/breastcan_t.csv", stringsAsFactors = F)
+cancer_test <- read.csv("C:/Users/노승욱/Desktop/R자료/breastcan_te.csv", stringsAsFactors = F)
+dim(cancer_train)
+dim(cancer_test)
+str(cancer_train)
+str(cancer_test)
+head(cancer_train)
+head(cancer_test)
+
+cancer_model <- glm(Class ~ ., data=cancer_train, family = 'binomial')
+cancer_model
+summary(cancer_model)
+
+# 예측치 생성
+pred <- predict(cancer_model, newdata=cancer_test, type="response")
+pred
+summary(pred)
+str(pred)
+
+# 예측치 변환
+cpred <- ifelse(pred >= 0.5, 1, 0)
+table(cpred)
+
+t <- table(cpred, cancer_test$Class)
+t
+sum(diag(t)) / nrow(cancer_test)
+
+# 민감도와 특이도와의 관계에서 평가 모델을 제공 : ROC
+(pr <- prediction(pred, cancer_test$Class))
+pfr <- performance(pr, measure = "tpr", x.measure = "fpr")
+plot(pfr)
+
+# accuracy
+mean(cancer_test == t)
+mean(cancer_test != t)
