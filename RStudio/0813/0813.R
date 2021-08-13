@@ -57,3 +57,32 @@ intercept <- - p$b / p$w[[2]]
 slope <- - p$w[[1]] / p$w[[2]]
 abline(intercept, slope, col="green")
 
+###
+df = data.frame(
+  x2 = c(1:6),
+  x1 = c(6:1),
+  y = factor(c('n','n','n','y','y','y'))
+)
+df
+install.packages("nnet")
+library(nnet)
+model_net1 = nnet(y ~ ., df, size = 1)
+model_net1
+summary(model_net1)
+names(model_net1)
+model_net1$wts
+model_net1$coefnames
+model_net1$value
+model_net1$fitted.values
+model_net1$entropy
+model_net1$softmax
+
+predict(model_net1, df)
+p <- predict(model_net1, df, type="class")
+p
+table(p, df$y)
+
+install.packages("neuralnet")
+library(neuralnet)
+concrete <- read.csv("C:/Users/³ë½Â¿í/Desktop/RÀÚ·á/concrete.csv")
+str(concrete)
