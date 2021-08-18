@@ -224,4 +224,40 @@ head(result_df)
 write.csv(result_df, "recommends_movie.csv", row.names=T)
 
 ################################
-movie
+data("MovieLense")
+MovieLense
+
+ratings_movies <- MovieLense[rowCounts(MovieLense)>=50, colCounts(MovieLense)>=100]
+ratings_movies_b <- binarize(ratings_movies, minRating=1)
+as(ratings_movies_b, "matrix")
+
+idx <- sample(1:nrow(ratings_movies), nrow(ratings_movies)* 0.9)
+trainSet <- ratings_movies_b[idx,]
+recomm_target <- ratings_movies_b[-idx,]
+dim(trainSet)
+dim(recomm_target)
+
+recomm_model <- Recommender(trainSet, method="IBCF", parameter="Jaccard") #binarize면 Jaccard
+recomm_list <- predict(recomm_model, recomm_target, n=5)
+
+recomm_list
+as(recomm_list, "list")
+
+### 추천 모델 평가(evaluate)
+eval_scheme <- evaluationScheme(data=ratings_movies,
+                                method = "split", # cross_validation(교차평가), bootstrap
+                                train = 0.8, # 학습데이터 80%
+                                given = 15, # 사용자별 평가를 위한 아이템 수
+                                goodRating = 5, #좋은 평가 등급을 지정
+                                k = 5 # 시뮬레이션 횟수
+                                )
+eval_scheme
+55832 / (565 * 336)
+
+# 협업 필터링 방식
+ubcf_method <- list("UBCF_cosine" = list(name="UBCF", parm = list(method="Cosine")),
+                    "UBCF_pearson" = list(name="UBCF", parm = list(method="Pearson")),
+                    "IBCF_pearson" = list(name="IBCF", parm = list(method="Pearson")))
+result <- evaluate(eval_scheme, ubcf_method, type="topNList", n=c(1,3,5))
+result
+avg(result)
