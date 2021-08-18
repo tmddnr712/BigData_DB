@@ -106,3 +106,29 @@ plot(rules, method = "grouped")
 itemFrequencyPlot(Adult, support=0.5)
 
 # lhs = white
+white.lhs <- subset(rules, lhs %in% "race=White")
+inspect(white.lhs) # 24건건
+plot(white.lhs, method="graph")
+plot(white.lhs, method="grouped")
+plot(white.lhs, method="graph", control = list(layout=igraph::in_circle(), nodeCol=grey.colors(10),
+                                               edgeCol=grey(.7), alpha=1))
+
+# 백인 or 미국인
+whiteORus.lhs <- subset(rules, lhs %in% "race=White", lhs %in% "native-contry=United States")
+whiteORus.lhs
+inspect(whiteORus.lhs)
+plot(whiteORus.lhs, "graph")
+
+# set of 0 rules
+rules <- apriori(Adult, parameter = list(support=0.3, confidence=0.5))
+husband.rhs <- subset(rules, rhs %in% "relationship=Husband")
+husband.rhs
+inspect(husband.rhs)
+plot(husband.rhs, method="grouped")
+
+# 정렬
+inspect(head(sort(rules, decreasing = T, by =c("support", "confidence")),3))
+
+#
+data("AdultUCI")
+str(AdultUCI)
