@@ -652,34 +652,11 @@ data.frame(variables = names(importance(rf, method = "janitza")),
 pred <- predict(rf, data=test)$predictions
 confusionMatrix(pred, test$DEATH_EVENT, positive = "1")
 
-##################################################GBDT
-train_lgb <- lgb.Dataset(data = as.matrix(select(train_n, -DEATH_EVENT)), label = train_n$DEATH_EVENT)
-
-set.seed(0)
-lgb <- lightgbm(data = train_lgb, objective = "binary", verbosity = -1,
-                learning_rate = 0.1,
-                colsample_bytree = 0.8)
-
-lgb.importance(lgb) %>%
-  ggplot(aes(x = Gain,
-             y = reorder(Feature, X = Gain))) +
-  geom_bar(stat = "identity",
-           fill = palette_ro[6],
-           alpha=0.9) +
-  labs(x ="feature_importance", y = "features", title = "Feature importance of LightGBM") +
-  theme_minimal(base_size = 12)
-
-pred <- as.factor(predict(lgb, as.matrix(select(test_n, -DEATH_EVENT))) >= 0.5) %>%
-  fct_recode("0" = "FALSE", "1" = "TRUE")
-confusionMatrix(pred, as.factor(test_n$DEATH_EVENT), positive = "1")
-
-acc_lgb <- confusionMatrix(pred, as.factor(test_n$DEATH_EVENT))$overall["Accuracy"]
-tpr_lgb <- confusionMatrix(pred, as.factor(test_n$DEATH_EVENT))$byClass["Specificity"]
 
 ########################################################### Result
-data.frame(algorithm = c("logistic\nregression", "SVM", "decision\ntree", "random\nforest", "LightGBM"),
-           accuracy = c(acc_lr, acc_svm, acc_cart, acc_rf, acc_lgb)*100,
-           recall = c(tpr_lr, tpr_svm, tpr_cart, tpr_rf, tpr_lgb)*100) %>%
+data.frame(algorithm = c("logistic\nregression", "SVM", "decision\ntree", "random\nforest"),
+           accuracy = c(acc_lr, acc_svm, acc_cart, acc_rf)*100,
+           recall = c(tpr_lr, tpr_svm, tpr_cart, tpr_rf)*100) %>%
   pivot_longer(col = -algorithm, names_to = "metrics", values_to = "percent") %>%
   ggplot(aes(x = reorder(algorithm, X = percent),
              y = percent,
